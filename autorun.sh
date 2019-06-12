@@ -1,5 +1,8 @@
-echo "USAGE: docker run -v <SRC CODE>:/mnt/data -it chihyinglin/build_rtk1619  bash /root/autorun.sh <UID> [NAME]"
-echo "EXAMPLE: docker run -v ~/work/latticework/git/1619sdkrelease:/mnt/data -it chihyinglin/build_rtk1619  bash /root/autorun.sh `id -u` cy"
+echo "USAGE: docker run -v <SRC CODE>:/mnt/data -it chihyinglin/build_rtk1619  bash /root/autorun.sh <UID> [NAME [CMD]]"
+echo "EXAMPLE"
+echo "    docker run -v ~/work/latticework/git/1619sdkrelease:/mnt/data -it chihyinglin/build_rtk1619  bash /root/autorun.sh `id -u`"
+echo "    docker run -v ~/work/latticework/git/1619sdkrelease:/mnt/data -it chihyinglin/build_rtk1619  bash /root/autorun.sh `id -u` cy"
+echo "    docker run -v ~/work/latticework/git/1619sdkrelease:/mnt/data -it chihyinglin/build_rtk1619  bash /root/autorun.sh `id -u` cy build"
 
 if [ "$1" == "" ]
 then
@@ -25,6 +28,12 @@ else
 	sudo usermod -u $uid $user	
 	sudo groupmod -g $uid $user
 	
-	sudo su $user -c "cd /mnt/data/OpenWRT-LEDE && source ./build.sh"
+	if [ "$3" == "build" ]
+	then
+		sudo su $user -c "cd /mnt/data/OpenWRT-LEDE && source ./build.sh"
+	else
+		sudo su $user
+	fi
+
 fi
 
